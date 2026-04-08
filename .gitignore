@@ -1,0 +1,79 @@
+# Go相关
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+goharness
+go.sum
+tmp_*.go
+
+# Node.js相关
+frontend/terminal/node_modules/
+frontend/terminal/npm-debug.log*
+frontend/terminal/yarn-debug.log*
+frontend/terminal/yarn-error.log*
+frontend/terminal/lerna-debug.log*
+frontend/terminal/pnpm-debug.log*
+frontend/terminal/coverage/
+frontend/terminal/Coverage/
+frontend/terminal.nyc_output/
+
+# TypeScript相关
+frontend/terminal/*.tsbuildinfo
+frontend/terminal/tsconfig.tsbuildinfo
+frontend/terminal/.tsbuildinfo
+
+# IDE相关
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+tmp/
+tmp_*
+
+# 日志文件
+*.log
+logs/
+
+# 环境变量文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 构建产物
+dist/
+build/
+out/
+
+# Python文件（如果有的话）
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+
+# 操作系统生成的文件
+.fuse_hidden*
+*.o
+*.a
+*.lib
+
+# 测试覆盖率
+coverage.txt
+coverage.html
+*.cover
+coverage.xml
+coverage.json
