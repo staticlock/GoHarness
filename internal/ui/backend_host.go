@@ -23,7 +23,7 @@ import (
 	"github.com/user/goharness/internal/tasks"
 )
 
-const assistantDeltaFlushInterval = 150 * time.Millisecond
+const assistantDeltaFlushInterval = 300 * time.Millisecond
 
 // BackendHostConfig contains the runtime options for backend-only mode.
 type BackendHostConfig struct {
@@ -46,8 +46,8 @@ type processResult struct {
 
 type backendHost struct {
 	ctx      context.Context
-	bundle   *runtime.RuntimeBundle
-	registry *commands.Registry
+	bundle   *runtime.RuntimeBundle // 运行捆绑包
+	registry *commands.Registry     // 命令注册表
 	in       io.Reader
 	out      io.Writer
 
@@ -55,10 +55,13 @@ type backendHost struct {
 	doneCh    chan processResult
 	busy      bool
 
-	writeMu   sync.Mutex // 确保事件发送的原子性，避免多个事件交错在一起导致前端解析错误
-	pendingMu sync.Mutex
-	pendingP  map[string]chan bool
-	pendingQ  map[string]chan string
+	writeMu           sync.Mutex // 确保事件发送的原子性，避免多个事件交错在一起导致前端解析错误
+	pendingMu         sync.Mutex
+	snapshotMu        sync.Mutex
+	pendingP          map[string]chan bool
+	pendingQ          map[string]chan string
+	lastStateSnapshot string
+	lastTasksSnapshot string
 }
 
 // RunBackendHost executes the OHJSON protocol loop for the React terminal UI.
@@ -113,10 +116,6 @@ func RunBackendHost(ctx context.Context, cfg BackendHostConfig) error {
 	}); err != nil {
 		return err
 	}
-	if err := h.emitStatusSnapshot(); err != nil {
-		return err
-	}
-
 	go h.readRequests()
 	for {
 		if h.requestCh == nil && !h.busy {
@@ -264,10 +263,16 @@ func (h *backendHost) processLine(line string) (bool, error) {
 				return err
 			}
 			msg := strings.TrimSpace(e.Message.Text)
-			if err := h.emitEvent(BackendEvent{Type: "assistant_complete", Message: msg, Item: &TranscriptItem{Role: "assistant", Text: msg}}); err != nil {
-				return err
+			if len(e.Message.ToolUses) > 0 {
+				if msg != "" {
+					return h.emitEvent(BackendEvent{Type: "transcript_item", Item: &TranscriptItem{Role: "assistant", Text: msg}})
+				}
+				return nil
 			}
-			return h.emitTasksSnapshot()
+			if msg == "" {
+				return nil
+			}
+			return h.emitEvent(BackendEvent{Type: "assistant_complete", Message: msg, Item: &TranscriptItem{Role: "assistant", Text: msg}})
 		case engine.ToolExecutionStarted:
 			if err := flushDelta(); err != nil {
 				return err
@@ -337,11 +342,42 @@ func (h *backendHost) emitListSessions() error {
 }
 
 func (h *backendHost) emitTasksSnapshot() error {
-	return h.emitEvent(BackendEvent{Type: "tasks_snapshot", Tasks: taskSnapshots(tasks.DefaultManager().ListTasks(""))})
+	event := BackendEvent{Type: "tasks_snapshot", Tasks: taskSnapshots(tasks.DefaultManager().ListTasks(""))}
+	emit, err := h.shouldEmitSnapshot(&h.lastTasksSnapshot, event)
+	if err != nil {
+		return err
+	}
+	if !emit {
+		return nil
+	}
+	return h.emitEvent(event)
 }
 
 func (h *backendHost) emitStatusSnapshot() error {
-	return h.emitEvent(BackendEvent{Type: "state_snapshot", State: statePayload(buildAppState(h.bundle)), MCPServers: mcpServerPayload(h.bundle.MCPManager.ListStatuses()), BridgeSessions: bridgeSessionPayload(bridge.DefaultManager().ListSnapshots())})
+	event := BackendEvent{Type: "state_snapshot", State: statePayload(buildAppState(h.bundle)), MCPServers: mcpServerPayload(h.bundle.MCPManager.ListStatuses()), BridgeSessions: bridgeSessionPayload(bridge.DefaultManager().ListSnapshots())}
+	emit, err := h.shouldEmitSnapshot(&h.lastStateSnapshot, event)
+	if err != nil {
+		return err
+	}
+	if !emit {
+		return nil
+	}
+	return h.emitEvent(event)
+}
+
+func (h *backendHost) shouldEmitSnapshot(cache *string, event BackendEvent) (bool, error) {
+	payload, err := json.Marshal(event)
+	if err != nil {
+		return false, err
+	}
+	serialized := string(payload)
+	h.snapshotMu.Lock()
+	defer h.snapshotMu.Unlock()
+	if *cache == serialized {
+		return false, nil
+	}
+	*cache = serialized
+	return true, nil
 }
 
 func buildAppState(bundle *runtime.RuntimeBundle) state.AppState {

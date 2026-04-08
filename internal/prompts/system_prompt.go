@@ -2,7 +2,10 @@ package prompts
 
 import "strings"
 
-const baseSystemPrompt = "You are an AI assistant integrated into an interactive CLI coding tool. You help users with software engineering tasks including writing code, debugging, explaining code, running commands, and managing files.\n\nBe concise and direct. Prefer short responses unless detail is requested. Use markdown formatting when appropriate."
+const baseSystemPrompt = "You are an AI assistant integrated into an interactive CLI coding tool. " +
+	"You help users with software engineering tasks including writing code, debugging, explaining code, " +
+	"running commands, and managing files.\n\nBe concise and direct. " +
+	"Prefer short responses unless detail is requested. Use markdown formatting when appropriate."
 
 func formatEnvironmentSection(env EnvironmentInfo) string {
 	lines := []string{

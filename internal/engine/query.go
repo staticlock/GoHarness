@@ -45,7 +45,7 @@ func RunQuery(
 
 		stream, err := qc.APIClient.StreamMessage(ApiMessageRequest{
 			Model:        qc.Model,
-			Messages:     append([]ConversationMessage{}, (*messages)...),
+			Messages:     append([]ConversationMessage{}, *messages...),
 			SystemPrompt: qc.SystemPrompt,
 			MaxTokens:    qc.MaxTokens,
 			Tools:        qc.ToolRegistry.ToAPISchema(),
@@ -54,13 +54,18 @@ func RunQuery(
 			return err
 		}
 
-		for {
+		streamClosed := false
+		for !streamClosed {
 			select {
 			case <-ctx.Done():
 				return ctx.Err()
 			case ev, ok := <-stream:
 				if !ok {
-					goto streamDone
+					if finalMessage == nil {
+						return errors.New("model stream finished without a final message")
+					}
+					streamClosed = true
+					continue
 				}
 				if ev.TextDelta != "" {
 					if err := emit(AssistantTextDelta{Text: ev.TextDelta}, nil); err != nil {
@@ -73,11 +78,6 @@ func RunQuery(
 					usage = ev.Complete.Usage
 				}
 			}
-		}
-
-	streamDone:
-		if finalMessage == nil {
-			return errors.New("model stream finished without a final message")
 		}
 
 		*messages = append(*messages, *finalMessage)

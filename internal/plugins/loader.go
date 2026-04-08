@@ -42,7 +42,7 @@ func LoadPluginExtensions(settings config.Settings, cwd string) (map[string][]ho
 }
 
 func discoverPluginPaths(cwd string) []string {
-	paths := []string{}
+	var paths []string
 	if cfgDir, err := config.ConfigDir(); err == nil {
 		paths = append(paths, scanPluginRoot(filepath.Join(cfgDir, "plugins"))...)
 	}
@@ -55,7 +55,7 @@ func scanPluginRoot(root string) []string {
 	if err != nil {
 		return nil
 	}
-	out := []string{}
+	var out []string
 	for _, entry := range entries {
 		if !entry.IsDir() {
 			continue

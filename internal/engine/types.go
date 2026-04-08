@@ -2,14 +2,14 @@ package engine
 
 import "github.com/user/goharness/internal/tools"
 
-// ToolUse represents one model-requested tool invocation.
+// ToolUse represents one model-requested tool invocation. 表示一个模型请求的工具调用
 type ToolUse struct {
 	ID    string         `json:"id"`
 	Name  string         `json:"name"`
 	Input map[string]any `json:"input"`
 }
 
-// ToolResultBlock is appended as user content after tool execution.
+// ToolResultBlock is appended as user content after tool execution. 工具结果块会作为工具执行后的用户内容附加。
 type ToolResultBlock struct {
 	ToolUseID string `json:"tool_use_id"`
 	Content   string `json:"content"`
@@ -69,14 +69,14 @@ type SupportsStreamingMessages interface {
 	StreamMessage(req ApiMessageRequest) (<-chan ApiStreamEvent, error)
 }
 
-// PermissionDecision captures policy outcomes for a tool call.
+// PermissionDecision captures policy outcomes for a tool call. 捕捉工具调用的策略结果
 type PermissionDecision struct {
 	Allowed              bool
 	RequiresConfirmation bool
 	Reason               string
 }
 
-// PermissionChecker evaluates whether a tool call may proceed.
+// PermissionChecker evaluates whether a tool call may proceed. 评估工具调用是否可以继续。
 type PermissionChecker interface {
 	Evaluate(toolName string, isReadOnly bool, filePath, command string) PermissionDecision
 }

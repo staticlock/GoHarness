@@ -38,7 +38,6 @@ func newPluginCommand() *cobra.Command {
 
 	var source string
 	installCmd := &cobra.Command{
-
 		Use:   "install [source]",
 		Short: "Install a plugin from a source path",
 		Args:  cobra.MaximumNArgs(1),

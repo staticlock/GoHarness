@@ -28,19 +28,19 @@ import (
 	"github.com/user/goharness/internal/tools"
 )
 
-// Result is the return payload for one slash command execution.
+// Result is the return payload for one slash command execution. 斜杠命令的返回结果 /help
 type Result struct {
 	Message     string
 	ShouldExit  bool
 	ClearScreen bool
 }
 
-// Context carries runtime objects used by command handlers.
+// Context carries runtime objects used by command handlers. 携带命令处理程序使用的运行时对象
 type Context struct {
 	Engine       *engine.QueryEngine
 	CWD          string
-	ToolRegistry *tools.Registry
-	MCPManager   *mcp.ClientManager
+	ToolRegistry *tools.Registry    // 所有的tools
+	MCPManager   *mcp.ClientManager // mcp
 }
 
 // Handler executes one slash command.
@@ -72,7 +72,7 @@ func (r *Registry) Register(cmd Command) {
 	r.commands[cmd.Name] = cmd
 }
 
-// Lookup parses slash input and returns command + args.
+// Lookup parses slash input and returns command + args. 解析斜杠输入，返回命令 + ARGS
 func (r *Registry) Lookup(rawInput string) (*Command, string) {
 	if !strings.HasPrefix(rawInput, "/") {
 		return nil, ""
