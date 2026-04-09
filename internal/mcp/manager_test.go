@@ -2,16 +2,11 @@ package mcp
 
 import (
 	"encoding/json"
-	"net/http"
-	"net/http/httptest"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"testing"
-
-	"github.com/gorilla/websocket"
 )
 
 type fakeTransport struct {
