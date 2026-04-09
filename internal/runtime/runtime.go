@@ -8,7 +8,6 @@ import (
 
 	"github.com/staticlock/GoHarness/internal/api"
 	"github.com/staticlock/GoHarness/internal/config"
-	"github.com/staticlock/GoHarness/internal/coordinator"
 	"github.com/staticlock/GoHarness/internal/engine"
 	"github.com/staticlock/GoHarness/internal/hooks"
 	"github.com/staticlock/GoHarness/internal/mcp"
