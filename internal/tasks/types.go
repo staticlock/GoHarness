@@ -6,8 +6,10 @@ import "time"
 type TaskType string
 
 const (
-	TaskTypeLocalBash  TaskType = "local_bash"
-	TaskTypeLocalAgent TaskType = "local_agent"
+	TaskTypeLocalBash         TaskType = "local_bash"
+	TaskTypeLocalAgent        TaskType = "local_agent"
+	TaskTypeRemoteAgent       TaskType = "remote_agent"
+	TaskTypeInProcessTeammate TaskType = "in_process_teammate"
 )
 
 // TaskStatus represents current lifecycle state for a task.

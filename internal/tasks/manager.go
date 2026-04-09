@@ -93,6 +93,19 @@ func (m *Manager) UpdateTaskOutput(taskID string, output string) error {
 	return nil
 }
 
+// UpdateTaskMetadata sets a specific metadata key-value pair.
+func (m *Manager) UpdateTaskMetadata(taskID string, key string, value string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	record, ok := m.tasks[taskID]
+	if !ok {
+		return fmt.Errorf("No task found with ID: %s", taskID)
+	}
+	record.Metadata[key] = value
+	m.tasks[taskID] = record
+	return nil
+}
+
 // UpdateTask updates task metadata fields used by command/status flows.
 func (m *Manager) UpdateTask(taskID string, description *string, progress *int, statusNote *string) (Record, error) {
 	m.mu.Lock()
