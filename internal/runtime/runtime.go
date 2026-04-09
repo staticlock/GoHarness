@@ -8,6 +8,7 @@ import (
 
 	"github.com/staticlock/GoHarness/internal/api"
 	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/coordinator"
 	"github.com/staticlock/GoHarness/internal/engine"
 	"github.com/staticlock/GoHarness/internal/hooks"
 	"github.com/staticlock/GoHarness/internal/mcp"
@@ -133,6 +134,8 @@ func BuildRuntimeWithOptions(cwd, model, baseURL, systemPrompt, apiKey, permissi
 	registry.Register(&tools.ToolSearchTool{})
 	registry.Register(&tools.ListMcpResourcesTool{Manager: mcpManager})
 	registry.Register(&tools.ReadMcpResourceTool{Manager: mcpManager})
+	registry.Register(&tools.TeamCreateTool{})
+	registry.Register(&tools.TeamDeleteTool{})
 	mcpToolKeys := map[string]string{}
 	for _, toolInfo := range mcpManager.ListTools() {
 		adapter := tools.NewMcpToolAdapter(mcpManager, toolInfo)

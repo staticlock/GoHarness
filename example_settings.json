@@ -1,0 +1,33 @@
+{
+  "model": "claude-sonnet-4-20250514",
+  "max_tokens": 8192,
+  "api_key": "",
+
+  "permission": {
+    "mode": "default",
+    "auto_approve_patterns": ["bash:ls*", "bash:cat*", "glob:*", "grep:*", "read_file:*"]
+  },
+
+  "mcp_servers": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/Y7000/Desktop"],
+      "env": {}
+    },
+    "brave-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "your-brave-api-key-here"
+      }
+    },
+    "fetch": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "env": {}
+    }
+  }
+}

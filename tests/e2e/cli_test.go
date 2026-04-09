@@ -1,10 +1,7 @@
 package e2e
 
 import (
-	"os"
-	"path/filepath"
 	"testing"
-	"time"
 
 	"github.com/staticlock/GoHarness/tests/testutils"
 )

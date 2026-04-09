@@ -199,7 +199,8 @@ func (h *backendHost) handleFrontendRequest(req FrontendRequest) (bool, error) {
 }
 
 func (h *backendHost) processLine(line string) (bool, error) {
-	if err := h.emitEvent(BackendEvent{Type: "transcript_item", Item: &TranscriptItem{Role: "user", Text: line}}); err != nil {
+	if err := h.emitEvent(BackendEvent{Type: "transcript_item",
+		Item: &TranscriptItem{Role: "user", Text: line}}); err != nil {
 		return false, err
 	}
 

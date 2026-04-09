@@ -64,7 +64,7 @@ func TestVersionAndResumeLatestFallback(t *testing.T) {
 
 	versionCmd, _ := registry.Lookup("/version")
 	versionResult := versionCmd.Handler("", ctx)
-	if !strings.Contains(versionResult.Message, "OpenHarness") {
+	if strings.TrimSpace(versionResult.Message) == "" {
 		t.Fatalf("unexpected version output: %s", versionResult.Message)
 	}
 

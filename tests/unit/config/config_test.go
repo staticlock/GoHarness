@@ -1,10 +1,11 @@
-package config
+package config_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
 
+	config "github.com/staticlock/GoHarness/internal/config"
 	"github.com/staticlock/GoHarness/tests/testutils"
 )
 
@@ -23,7 +24,7 @@ func TestLoadSettings_DefaultValues(t *testing.T) {
 		os.Setenv("ANTHROPIC_BASE_URL", oldBaseURL)
 	}()
 
-	settings, err := LoadSettings()
+	settings, err := config.LoadSettings()
 	if err != nil {
 		t.Fatalf("Failed to load settings: %v", err)
 	}
@@ -53,7 +54,7 @@ func TestLoadSettings_EnvironmentOverrides(t *testing.T) {
 		os.Setenv("OPENHARNESS_MAX_TOKENS", "")
 	}()
 
-	settings, err := LoadSettings()
+	settings, err := config.LoadSettings()
 	if err != nil {
 		t.Fatalf("Failed to load settings: %v", err)
 	}
@@ -102,7 +103,7 @@ func TestLoadSettings_ConfigFile(t *testing.T) {
 		os.Setenv("OPENHARNESS_CONFIG_DIR", oldConfigDir)
 	}()
 
-	settings, err := LoadSettings()
+	settings, err := config.LoadSettings()
 	if err != nil {
 		t.Fatalf("Failed to load settings: %v", err)
 	}
@@ -147,7 +148,7 @@ func TestResolveAPIKey(t *testing.T) {
 				os.Setenv("ANTHROPIC_API_KEY", oldApiKey)
 			}()
 
-			settings := Settings{
+			settings := config.Settings{
 				APIKey: tt.apiKey,
 			}
 
