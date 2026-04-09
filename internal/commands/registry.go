@@ -118,10 +118,10 @@ func CreateDefaultRegistry() *Registry {
 
 	registry.Register(Command{
 		Name:        "version",
-		Description: "Show OpenHarness version",
+		Description: "Show GoHarness version",
 		Handler: func(_ string, ctx Context) Result {
 			_ = ctx
-			return Result{Message: "OpenHarness go"}
+			return Result{Message: "v1.0.0"}
 		},
 	})
 
