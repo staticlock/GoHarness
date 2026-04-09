@@ -3,7 +3,7 @@ package hooks
 import (
 	"fmt"
 
-	"github.com/user/goharness/internal/config"
+	"github.com/staticlock/GoHarness/internal/config"
 )
 
 // LoadRegistry loads hooks from settings and optional plugin hooks.

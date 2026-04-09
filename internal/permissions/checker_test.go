@@ -3,7 +3,7 @@ package permissions
 import (
 	"testing"
 
-	"github.com/user/goharness/internal/config"
+	"github.com/staticlock/GoHarness/internal/config"
 )
 
 func TestCheckerModes(t *testing.T) {

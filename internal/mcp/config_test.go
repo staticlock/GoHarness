@@ -3,7 +3,7 @@ package mcp
 import (
 	"testing"
 
-	"github.com/user/goharness/internal/config"
+	"github.com/staticlock/GoHarness/internal/config"
 )
 
 func TestLoadServerConfigsAndPrefix(t *testing.T) {

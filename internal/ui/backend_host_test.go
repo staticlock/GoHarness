@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/user/goharness/internal/bridge"
-	"github.com/user/goharness/internal/engine"
+	"github.com/staticlock/GoHarness/internal/bridge"
+	"github.com/staticlock/GoHarness/internal/engine"
 )
 
 func TestRunBackendHostHandlesSlashCommandAndShutdown(t *testing.T) {

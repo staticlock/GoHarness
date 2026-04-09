@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/user/goharness/internal/config"
+	"github.com/staticlock/GoHarness/internal/config"
 )
 
 // SessionSnapshot is a UI-safe bridge session payload.

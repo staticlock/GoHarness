@@ -3,10 +3,10 @@ package runtime
 import "context"
 import "testing"
 
-import "github.com/user/goharness/internal/config"
-import "github.com/user/goharness/internal/engine"
-import "github.com/user/goharness/internal/mcp"
-import "github.com/user/goharness/internal/tools"
+import "github.com/staticlock/GoHarness/internal/config"
+import "github.com/staticlock/GoHarness/internal/engine"
+import "github.com/staticlock/GoHarness/internal/mcp"
+import "github.com/staticlock/GoHarness/internal/tools"
 
 func TestBuildRuntimeInitializesMCPAndHooks(t *testing.T) {
 	bundle, err := BuildRuntime(t.TempDir(), "", "", "", "", "", 2)

@@ -3,7 +3,7 @@ package mcp
 import (
 	"fmt"
 
-	"github.com/user/goharness/internal/config"
+	"github.com/staticlock/GoHarness/internal/config"
 )
 
 // LoadServerConfigs normalizes MCP server config from settings map.

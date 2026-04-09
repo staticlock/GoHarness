@@ -3,7 +3,7 @@ package permissions
 import (
 	"path/filepath"
 
-	"github.com/user/goharness/internal/config"
+	"github.com/staticlock/GoHarness/internal/config"
 )
 
 // Decision is the result of evaluating one tool invocation.

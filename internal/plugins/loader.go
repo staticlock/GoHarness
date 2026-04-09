@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/user/goharness/internal/config"
-	"github.com/user/goharness/internal/hooks"
-	"github.com/user/goharness/internal/mcp"
+	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/hooks"
+	"github.com/staticlock/GoHarness/internal/mcp"
 )
 
 type manifest struct {

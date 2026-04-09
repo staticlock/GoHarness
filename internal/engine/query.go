@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/user/goharness/internal/tools"
+	"github.com/staticlock/GoHarness/internal/tools"
 )
 
 // QueryContext carries dependencies and options for one query run.

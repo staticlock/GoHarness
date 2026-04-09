@@ -12,15 +12,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/user/goharness/internal/api"
-	"github.com/user/goharness/internal/bridge"
-	"github.com/user/goharness/internal/commands"
-	"github.com/user/goharness/internal/config"
-	"github.com/user/goharness/internal/engine"
-	"github.com/user/goharness/internal/runtime"
-	"github.com/user/goharness/internal/services"
-	"github.com/user/goharness/internal/state"
-	"github.com/user/goharness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/api"
+	"github.com/staticlock/GoHarness/internal/bridge"
+	"github.com/staticlock/GoHarness/internal/commands"
+	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/engine"
+	"github.com/staticlock/GoHarness/internal/runtime"
+	"github.com/staticlock/GoHarness/internal/services"
+	"github.com/staticlock/GoHarness/internal/state"
+	"github.com/staticlock/GoHarness/internal/tasks"
 )
 
 const assistantDeltaFlushInterval = 300 * time.Millisecond

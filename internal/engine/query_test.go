@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/user/goharness/internal/config"
-	"github.com/user/goharness/internal/permissions"
-	"github.com/user/goharness/internal/tools"
+	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/permissions"
+	"github.com/staticlock/GoHarness/internal/tools"
 )
 
 type fakeClient struct{}

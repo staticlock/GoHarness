@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/user/goharness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/tasks"
 )
 
 // TaskCreateTool creates a background task record.

@@ -1,6 +1,6 @@
 package engine
 
-import "github.com/user/goharness/internal/tools"
+import "github.com/staticlock/GoHarness/internal/tools"
 
 // ToolUse represents one model-requested tool invocation. 表示一个模型请求的工具调用
 type ToolUse struct {

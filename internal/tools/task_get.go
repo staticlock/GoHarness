@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/user/goharness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/tasks"
 )
 
 // TaskGetTool retrieves one task record.

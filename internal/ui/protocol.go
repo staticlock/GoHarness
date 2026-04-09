@@ -3,10 +3,10 @@ package ui
 import (
 	"fmt"
 
-	"github.com/user/goharness/internal/bridge"
-	"github.com/user/goharness/internal/mcp"
-	"github.com/user/goharness/internal/state"
-	"github.com/user/goharness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/bridge"
+	"github.com/staticlock/GoHarness/internal/mcp"
+	"github.com/staticlock/GoHarness/internal/state"
+	"github.com/staticlock/GoHarness/internal/tasks"
 )
 
 // 自定义协议前缀，区分普通日志和协议消息

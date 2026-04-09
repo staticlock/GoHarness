@@ -12,7 +12,7 @@ import (
 	aoption "github.com/anthropics/anthropic-sdk-go/option"
 	openai "github.com/openai/openai-go"
 	ooption "github.com/openai/openai-go/option"
-	"github.com/user/goharness/internal/engine"
+	"github.com/staticlock/GoHarness/internal/engine"
 )
 
 const maxRetries = 3

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/user/goharness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/tasks"
 )
 
 func TestTaskToolsFlow(t *testing.T) {

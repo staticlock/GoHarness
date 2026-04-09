@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/user/goharness/internal/mcp"
+	"github.com/staticlock/GoHarness/internal/mcp"
 )
 
 // McpToolAdapter exposes one MCP tool through the local tool registry.

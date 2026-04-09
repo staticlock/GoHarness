@@ -1,4 +1,4 @@
-module github.com/user/goharness
+module github.com/staticlock/GoHarness
 
 go 1.25.6
 

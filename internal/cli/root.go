@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/user/goharness/internal/ui"
+	"github.com/staticlock/GoHarness/internal/ui"
 )
 
 type rootOptions struct {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/user/goharness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/tasks"
 )
 
 // TaskListTool lists background tasks.

@@ -9,11 +9,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/user/goharness/internal/commands"
-	"github.com/user/goharness/internal/config"
-	"github.com/user/goharness/internal/engine"
-	"github.com/user/goharness/internal/runtime"
-	"github.com/user/goharness/internal/services"
+	"github.com/staticlock/GoHarness/internal/commands"
+	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/engine"
+	"github.com/staticlock/GoHarness/internal/runtime"
+	"github.com/staticlock/GoHarness/internal/services"
 )
 
 // PrintOptions keeps CLI-compatible print mode options.

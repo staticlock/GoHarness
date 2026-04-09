@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/user/goharness/internal/config"
-	"github.com/user/goharness/internal/engine"
+	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/engine"
 )
 
 // SessionSnapshot is the persisted session payload.

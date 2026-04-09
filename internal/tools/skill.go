@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/user/goharness/internal/skills"
+	"github.com/staticlock/GoHarness/internal/skills"
 )
 
 // SkillTool reads bundled/user skill contents by name.

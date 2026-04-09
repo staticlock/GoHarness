@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/user/goharness/internal/cli"
+	"github.com/staticlock/GoHarness/internal/cli"
 )
 
 func main() {

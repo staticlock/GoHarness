@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/user/goharness/internal/config"
-	"github.com/user/goharness/internal/engine"
-	"github.com/user/goharness/internal/services"
-	"github.com/user/goharness/internal/tasks"
-	"github.com/user/goharness/internal/tools"
+	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/engine"
+	"github.com/staticlock/GoHarness/internal/services"
+	"github.com/staticlock/GoHarness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/tools"
 )
 
 func TestLookupAndHelp(t *testing.T) {

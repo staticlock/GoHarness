@@ -6,16 +6,16 @@ import (
 	"os"
 	"strings"
 
-	"github.com/user/goharness/internal/api"
-	"github.com/user/goharness/internal/config"
-	"github.com/user/goharness/internal/engine"
-	"github.com/user/goharness/internal/hooks"
-	"github.com/user/goharness/internal/mcp"
-	"github.com/user/goharness/internal/permissions"
-	"github.com/user/goharness/internal/plugins"
-	"github.com/user/goharness/internal/prompts"
-	"github.com/user/goharness/internal/tasks"
-	"github.com/user/goharness/internal/tools"
+	"github.com/staticlock/GoHarness/internal/api"
+	"github.com/staticlock/GoHarness/internal/config"
+	"github.com/staticlock/GoHarness/internal/engine"
+	"github.com/staticlock/GoHarness/internal/hooks"
+	"github.com/staticlock/GoHarness/internal/mcp"
+	"github.com/staticlock/GoHarness/internal/permissions"
+	"github.com/staticlock/GoHarness/internal/plugins"
+	"github.com/staticlock/GoHarness/internal/prompts"
+	"github.com/staticlock/GoHarness/internal/tasks"
+	"github.com/staticlock/GoHarness/internal/tools"
 )
 
 // RuntimeBundle groups long-lived runtime objects for a session.
