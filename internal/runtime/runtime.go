@@ -69,7 +69,7 @@ func BuildRuntimeWithOptions(cwd, model, baseURL, systemPrompt, apiKey, permissi
 		}
 	}
 	if settings.SystemPrompt == "" {
-		settings.SystemPrompt = prompts.BuildSystemPrompt("", cwd)
+		settings.SystemPrompt = prompts.BuildSystemPrompt("", cwd, "")
 	}
 
 	pluginHooks, pluginMCP := plugins.LoadPluginExtensions(settings, cwd)

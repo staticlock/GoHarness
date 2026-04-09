@@ -66,7 +66,6 @@ func (c *Client) StreamMessage(req engine.ApiMessageRequest) (<-chan engine.ApiS
 	if err != nil {
 		return nil, err
 	}
-
 	out := make(chan engine.ApiStreamEvent, 2)
 	go func() {
 		defer close(out)

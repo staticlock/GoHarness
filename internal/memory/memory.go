@@ -244,20 +244,33 @@ func FindRelevantMemories(query string, cwd string, maxResults int) []MemoryHead
 }
 
 func LoadMemoryPrompt(cwd string) (string, error) {
+	memoryDir, err := GetProjectMemoryDir(cwd)
+	if err != nil {
+		return "", err
+	}
 	entrypoint, err := GetMemoryEntrypoint(cwd)
 	if err != nil {
 		return "", err
 	}
 
-	data, err := os.ReadFile(entrypoint)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return "", nil
-		}
-		return "", err
+	lines := []string{
+		"# Memory",
+		"- Persistent memory directory: " + memoryDir,
+		"- Use this directory to store durable user or project context that should survive future sessions.",
+		"- Prefer concise topic files plus an index entry in MEMORY.md.",
 	}
 
-	return string(data), nil
+	if _, err := os.Stat(entrypoint); err == nil {
+		data, err := os.ReadFile(entrypoint)
+		if err == nil {
+			content := string(data)
+			lines = append(lines, "", "## MEMORY.md", "```md", content, "```")
+		}
+	} else {
+		lines = append(lines, "", "## MEMORY.md", "(not created yet)")
+	}
+
+	return strings.Join(lines, "\n"), nil
 }
 
 func hashFirst12(s string) string {

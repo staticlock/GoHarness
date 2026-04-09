@@ -54,6 +54,21 @@ func ResolveKeybindings(overrides map[string]string) map[string]string {
 	return result
 }
 
+func LoadAllKeybindings() (map[string]string, error) {
+	path, err := GetKeybindingsPath()
+	if err != nil {
+		return nil, err
+	}
+	loaded, err := LoadKeybindings(path)
+	if err != nil {
+		return nil, err
+	}
+	if loaded == nil {
+		return DefaultKeybindings, nil
+	}
+	return ResolveKeybindings(loaded), nil
+}
+
 type KeybindingError struct {
 	Message string
 }

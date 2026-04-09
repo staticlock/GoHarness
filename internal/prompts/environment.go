@@ -3,44 +3,60 @@ package prompts
 import (
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 )
 
-// EnvironmentInfo captures runtime environment details for system prompt construction.
+// EnvironmentInfo mirrors Python's EnvironmentInfo dataclass.
 type EnvironmentInfo struct {
 	OSName          string
 	OSVersion       string
 	PlatformMachine string
 	Shell           string
 	CWD             string
+	HomeDir         string
 	Date            string
+	PythonVersion   string
 	GoVersion       string
 	IsGitRepo       bool
 	GitBranch       string
+	Hostname        string
+	Extra           map[string]string
 }
 
-// GetEnvironmentInfo returns environment metadata used by prompt builder.
-func GetEnvironmentInfo(cwd string) EnvironmentInfo {
-	if strings.TrimSpace(cwd) == "" {
-		cwd, _ = os.Getwd()
+func detectOS() (string, string) {
+	system := runtime.GOOS
+	if system == "linux" {
+		return "Linux", runtime.GOOS
+	} else if system == "darwin" {
+		return "macOS", runtime.GOOS
+	} else if system == "windows" {
+		return "Windows", runtime.GOOS
 	}
+	return system, runtime.GOOS
+}
+
+func detectShell() string {
 	shell := os.Getenv("SHELL")
-	if shell == "" {
-		shell = os.Getenv("ComSpec")
+	if shell != "" {
+		return filepath.Base(shell)
 	}
-	env := EnvironmentInfo{
-		OSName:          runtime.GOOS,
-		OSVersion:       runtime.GOOS,
-		PlatformMachine: runtime.GOARCH,
-		Shell:           shell,
-		CWD:             cwd,
-		Date:            time.Now().Format(time.RFC3339),
-		GoVersion:       runtime.Version(),
+	for _, candidate := range []string{"bash", "zsh", "fish", "sh"} {
+		if _, err := exec.LookPath(candidate); err == nil {
+			return candidate
+		}
 	}
-	env.IsGitRepo, env.GitBranch = detectGit(cwd)
-	return env
+	return "unknown"
+}
+
+func getHomeDir() string {
+	home, _ := os.UserHomeDir()
+	if home != "" {
+		return home
+	}
+	return os.Getenv("HOME")
 }
 
 func detectGit(cwd string) (bool, string) {
@@ -60,4 +76,36 @@ func detectGit(cwd string) (bool, string) {
 		return true, ""
 	}
 	return true, strings.TrimSpace(string(branchOut))
+}
+
+// GetEnvironmentInfo mirrors Python's get_environment_info function.
+func GetEnvironmentInfo(cwd string) EnvironmentInfo {
+	if strings.TrimSpace(cwd) == "" {
+		cwd, _ = os.Getwd()
+	}
+	osName, osVersion := detectOS()
+	shell := detectShell()
+	isGit, branch := detectGit(cwd)
+	hostname, _ := os.Hostname()
+	home, _ := os.UserHomeDir()
+	if home == "" {
+		home = os.Getenv("HOME")
+	}
+
+	env := EnvironmentInfo{
+		OSName:          osName,
+		OSVersion:       osVersion,
+		PlatformMachine: runtime.GOARCH,
+		Shell:           shell,
+		CWD:             cwd,
+		HomeDir:         home,
+		Date:            time.Now().Format("2006-01-02"),
+		PythonVersion:   runtime.Version(),
+		GoVersion:       runtime.Version(),
+		IsGitRepo:       isGit,
+		GitBranch:       branch,
+		Hostname:        hostname,
+		Extra:           map[string]string{},
+	}
+	return env
 }
