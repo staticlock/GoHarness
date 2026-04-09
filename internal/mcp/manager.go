@@ -188,3 +188,23 @@ func userDebugMessage(userText string, debugErr error) string {
 	}
 	return userText + " | debug: " + debugErr.Error()
 }
+
+func (m *ClientManager) GetServerConfig(serverName string) any {
+	cfg, ok := m.serverConfigs[serverName]
+	if !ok {
+		return nil
+	}
+	return map[string]any{
+		"type":    cfg.Type,
+		"command": cfg.Command,
+		"args":    cfg.Args,
+		"env":     cfg.Env,
+		"cwd":     cfg.CWD,
+		"url":     cfg.URL,
+		"headers": cfg.Headers,
+	}
+}
+
+func (m *ClientManager) UpdateServerConfig(serverName string, cfg ServerConfig) {
+	m.serverConfigs[serverName] = cfg
+}

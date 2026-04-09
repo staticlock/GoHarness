@@ -23,7 +23,7 @@ import (
 	"github.com/staticlock/GoHarness/internal/tasks"
 )
 
-const assistantDeltaFlushInterval = 300 * time.Millisecond
+const assistantDeltaFlushInterval = 500 * time.Millisecond
 
 // BackendHostConfig contains the runtime options for backend-only mode.
 type BackendHostConfig struct {
@@ -62,6 +62,9 @@ type backendHost struct {
 	pendingQ          map[string]chan string
 	lastStateSnapshot string
 	lastTasksSnapshot string
+
+	snapshotThrottle time.Duration // 快照节流时间
+	lastSnapshotEmit time.Time     // 上次发送快照的时间
 }
 
 // RunBackendHost executes the OHJSON protocol loop for the React terminal UI.
@@ -76,13 +79,15 @@ func RunBackendHost(ctx context.Context, cfg BackendHostConfig) error {
 	}
 
 	h := &backendHost{
-		ctx:       ctx,
-		in:        in,
-		out:       out,
-		requestCh: make(chan FrontendRequest, 32),
-		doneCh:    make(chan processResult, 1),
-		pendingP:  map[string]chan bool{},
-		pendingQ:  map[string]chan string{},
+		ctx:              ctx,
+		in:               in,
+		out:              out,
+		requestCh:        make(chan FrontendRequest, 32),
+		doneCh:           make(chan processResult, 1),
+		pendingP:         map[string]chan bool{},
+		pendingQ:         map[string]chan string{},
+		snapshotThrottle: 200 * time.Millisecond,
+		lastSnapshotEmit: time.Time{},
 	}
 
 	bundle, err := runtime.BuildRuntimeWithOptions(cfg.CWD, cfg.Model, cfg.BaseURL, cfg.SystemPrompt,
@@ -284,13 +289,7 @@ func (h *backendHost) processLine(line string) (bool, error) {
 			if err := flushDelta(); err != nil {
 				return err
 			}
-			if err := h.emitEvent(BackendEvent{Type: "tool_completed", ToolName: e.ToolName, Output: e.Output, IsError: boolPtr(e.IsError), Item: &TranscriptItem{Role: "tool_result", Text: e.Output, ToolName: e.ToolName, IsError: boolPtr(e.IsError)}}); err != nil {
-				return err
-			}
-			if err := h.emitTasksSnapshot(); err != nil {
-				return err
-			}
-			return h.emitStatusSnapshot()
+			return h.emitEvent(BackendEvent{Type: "tool_completed", ToolName: e.ToolName, Output: e.Output, IsError: boolPtr(e.IsError), Item: &TranscriptItem{Role: "tool_result", Text: e.Output, ToolName: e.ToolName, IsError: boolPtr(e.IsError)}})
 		}
 		return nil
 	}
@@ -343,6 +342,15 @@ func (h *backendHost) emitListSessions() error {
 }
 
 func (h *backendHost) emitTasksSnapshot() error {
+	h.snapshotMu.Lock()
+	now := time.Now()
+	if now.Sub(h.lastSnapshotEmit) < h.snapshotThrottle {
+		h.snapshotMu.Unlock()
+		return nil
+	}
+	h.lastSnapshotEmit = now
+	h.snapshotMu.Unlock()
+
 	event := BackendEvent{Type: "tasks_snapshot", Tasks: taskSnapshots(tasks.DefaultManager().ListTasks(""))}
 	emit, err := h.shouldEmitSnapshot(&h.lastTasksSnapshot, event)
 	if err != nil {
@@ -355,6 +363,15 @@ func (h *backendHost) emitTasksSnapshot() error {
 }
 
 func (h *backendHost) emitStatusSnapshot() error {
+	h.snapshotMu.Lock()
+	now := time.Now()
+	if now.Sub(h.lastSnapshotEmit) < h.snapshotThrottle {
+		h.snapshotMu.Unlock()
+		return nil
+	}
+	h.lastSnapshotEmit = now
+	h.snapshotMu.Unlock()
+
 	event := BackendEvent{Type: "state_snapshot", State: statePayload(buildAppState(h.bundle)), MCPServers: mcpServerPayload(h.bundle.MCPManager.ListStatuses()), BridgeSessions: bridgeSessionPayload(bridge.DefaultManager().ListSnapshots())}
 	emit, err := h.shouldEmitSnapshot(&h.lastStateSnapshot, event)
 	if err != nil {

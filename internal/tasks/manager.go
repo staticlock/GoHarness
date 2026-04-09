@@ -60,6 +60,39 @@ func (m *Manager) CreateAgentTask(prompt, description, cwd, model string) Record
 	return record
 }
 
+// UpdateTaskRecord updates an entire task record.
+func (m *Manager) UpdateTaskRecord(record Record) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.tasks[record.ID] = record
+}
+
+// UpdateTaskStatus updates a task's status.
+func (m *Manager) UpdateTaskStatus(taskID string, status string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	record, ok := m.tasks[taskID]
+	if !ok {
+		return fmt.Errorf("No task found with ID: %s", taskID)
+	}
+	record.Status = TaskStatus(status)
+	m.tasks[taskID] = record
+	return nil
+}
+
+// UpdateTaskOutput updates a task's output.
+func (m *Manager) UpdateTaskOutput(taskID string, output string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	record, ok := m.tasks[taskID]
+	if !ok {
+		return fmt.Errorf("No task found with ID: %s", taskID)
+	}
+	record.Metadata["output"] = output
+	m.tasks[taskID] = record
+	return nil
+}
+
 // UpdateTask updates task metadata fields used by command/status flows.
 func (m *Manager) UpdateTask(taskID string, description *string, progress *int, statusNote *string) (Record, error) {
 	m.mu.Lock()
@@ -152,6 +185,24 @@ func DefaultManager() *Manager {
 		defaultManager = NewManager()
 	})
 	return defaultManager
+}
+
+// WriteToTask writes a message to a running task's stdin.
+// Note: Currently returns error as stdin support requires more complex process management.
+func (m *Manager) WriteToTask(taskID string, message string) error {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	record, ok := m.tasks[taskID]
+	if !ok {
+		return fmt.Errorf("No task found with ID: %s", taskID)
+	}
+	if record.Status != "running" {
+		return fmt.Errorf("Task %s is not running", taskID)
+	}
+	if record.Type != "local_agent" {
+		return fmt.Errorf("Task %s does not accept input", taskID)
+	}
+	return fmt.Errorf("stdin writing not implemented - task runs in detached mode")
 }
 
 func taskID(taskType TaskType) string {

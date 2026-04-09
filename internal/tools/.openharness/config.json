@@ -1,0 +1,100 @@
+{
+  "ai": {
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 16384,
+    "temperature": 0.7,
+    "top_p": 1,
+    "base_url": "",
+    "timeout": 30000,
+    "system_prompt": ""
+  },
+  "ui": {
+    "theme": "default",
+    "output_style": "default",
+    "vim_mode": false,
+    "voice_mode": false,
+    "fast_mode": false,
+    "show_timestamps": true,
+    "show_tool_calls": true,
+    "auto_save": true,
+    "confirm_exit": true
+  },
+  "tools": {
+    "enabled": [
+      "file_read",
+      "file_write",
+      "bash",
+      "grep",
+      "web_fetch"
+    ],
+    "disabled": [],
+    "timeout": 30000,
+    "max_concurrent": 3,
+    "auto_confirm": false
+  },
+  "permission": {
+    "mode": "default",
+    "allowed_tools": [],
+    "denied_tools": [
+      "rm",
+      "format",
+      "dd"
+    ],
+    "path_rules": [
+      {
+        "pattern": "**/*.tmp",
+        "allow": false
+      },
+      {
+        "pattern": "/etc/**",
+        "allow": false
+      }
+    ],
+    "denied_commands": [
+      "rm -rf",
+      "format",
+      "dd"
+    ],
+    "allowed_commands": [
+      "git",
+      "npm",
+      "docker",
+      "python",
+      "node"
+    ]
+  },
+  "memory": {
+    "enabled": true,
+    "max_files": 5,
+    "max_entrypoint_lines": 200,
+    "max_context_lines": 1000,
+    "retention_days": 7,
+    "compress": true
+  },
+  "plugins": {
+    "enabled": {},
+    "directory": [
+      ".openharness\\plugins"
+    ],
+    "auto_load": true,
+    "timeout": 5000
+  },
+  "mcp": {
+    "servers": {}
+  },
+  "performance": {
+    "enabled": true,
+    "cache_ttl": 3600,
+    "max_requests": 5,
+    "timeout": 30000
+  },
+  "logging": {
+    "level": "info",
+    "file": "",
+    "format": "text",
+    "max_size": "100MB",
+    "max_backups": 5,
+    "max_age": 7
+  }
+}

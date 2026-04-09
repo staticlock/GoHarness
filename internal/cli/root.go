@@ -36,7 +36,6 @@ type rootOptions struct {
 	MCPConfig                  []string
 	CWD                        string
 	BackendOnly                bool
-	ReactTUI                   bool
 }
 
 // Execute runs the CLI root command.
@@ -48,31 +47,24 @@ func Execute() error {
 
 func newRootCommand(opts *rootOptions) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "goHarness",
-		Short: "Oh my goHarness! An AI-powered coding assistant.",
-		Long:  "Oh my goHarness! An AI-powered coding assistant.\n\nStarts an interactive session by default, use -p/--print for non-interactive output.",
+		Use:   "openharness",
+		Short: "Oh my Harness! An AI-powered coding assistant.",
+		Long:  "Oh my Harness! An AI-powered coding assistant.\n\nStarts an interactive session by default, use -p/--print for non-interactive output.",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			if opts.DangerouslySkipPermissions {
 				opts.PermissionMode = "full_auto"
 			}
-			if opts.ReactTUI {
+			if opts.BackendOnly {
 				if strings.TrimSpace(opts.PrintMode) != "" {
-					return errors.New("--react-tui cannot be used with --print")
+					return errors.New("--backend-only cannot be used with --print")
 				}
-				exitCode, err := ui.LaunchReactTUI(context.Background(), ui.LaunchOptions{
-					Cwd:          opts.CWD,
+				return ui.RunBackendHost(context.Background(), ui.BackendHostConfig{
+					CWD:          opts.CWD,
 					Model:        opts.Model,
 					BaseURL:      opts.BaseURL,
 					SystemPrompt: opts.SystemPrompt,
 					APIKey:       opts.APIKey,
 				})
-				if err != nil {
-					return err
-				}
-				if exitCode != 0 {
-					return fmt.Errorf("react tui exited with code %d", exitCode)
-				}
-				return nil
 			}
 			if strings.TrimSpace(opts.PrintMode) != "" {
 				return ui.RunPrintMode(ui.PrintOptions{
@@ -88,22 +80,23 @@ func newRootCommand(opts *rootOptions) *cobra.Command {
 					MaxTurns:           opts.MaxTurns,
 				})
 			}
-			//检查名为 "print" 的标志是否在命令行中被设置
 			if cmd.Flags().Changed("print") && strings.TrimSpace(opts.PrintMode) == "" {
 				return errors.New("-p/--print requires a prompt value, e.g. -p 'your prompt'")
 			}
-			//REPL = Read Eval Print Loop（读取-求值-输出-循环）
-			return ui.RunREPL(ui.ReplOptions{
-				Prompt:         "",
-				CWD:            opts.CWD,
-				Model:          opts.Model,
-				BaseURL:        opts.BaseURL,
-				SystemPrompt:   opts.SystemPrompt,
-				APIKey:         opts.APIKey,
-				PermissionMode: opts.PermissionMode,
-				MaxTurns:       opts.MaxTurns,
-				BackendOnly:    opts.BackendOnly,
+			exitCode, err := ui.LaunchReactTUI(context.Background(), ui.LaunchOptions{
+				Cwd:          opts.CWD,
+				Model:        opts.Model,
+				BaseURL:      opts.BaseURL,
+				SystemPrompt: opts.SystemPrompt,
+				APIKey:       opts.APIKey,
 			})
+			if err != nil {
+				return err
+			}
+			if exitCode != 0 {
+				return fmt.Errorf("react tui exited with code %d", exitCode)
+			}
+			return nil
 		},
 	}
 
@@ -141,8 +134,6 @@ func registerRootFlags(cmd *cobra.Command, opts *rootOptions) {
 	cmd.Flags().MarkHidden("cwd")
 	cmd.Flags().BoolVar(&opts.BackendOnly, "backend-only", false, "Run the structured backend host for the React terminal UI")
 	cmd.Flags().MarkHidden("backend-only")
-	// 这里必须默认false ,不然后面前端使用命令启动会出问题
-	cmd.Flags().BoolVar(&opts.ReactTUI, "react-tui", false, "Launch the React terminal UI frontend")
 }
 
 func defaultString(v, d string) string {

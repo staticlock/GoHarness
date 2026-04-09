@@ -1,11 +1,11 @@
 module github.com/staticlock/GoHarness
 
-go 1.25.6
+go 1.25.0
 
 require (
 	github.com/anthropics/anthropic-sdk-go v1.29.0
 	github.com/google/uuid v1.6.0
-	github.com/modelcontextprotocol/go-sdk v1.5.0
+	github.com/modelcontextprotocol/go-sdk v1.3.1
 	github.com/openai/openai-go v1.12.0
 	github.com/spf13/cobra v1.8.1
 )

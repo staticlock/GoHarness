@@ -115,9 +115,13 @@ func RemoveMemoryEntry(cwd string, name string) (bool, error) {
 		pattern = name + ".md"
 	}
 
+	nameLower := strings.ToLower(name)
+	patternLower := strings.ToLower(pattern)
+
 	if entries, err := os.ReadDir(memoryDir); err == nil {
 		for _, entry := range entries {
-			if entry.Name() == pattern || entry.Name() == name {
+			entryLower := strings.ToLower(entry.Name())
+			if entryLower == patternLower || entryLower == nameLower {
 				matches = append(matches, entry.Name())
 			}
 		}

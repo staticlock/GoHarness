@@ -135,6 +135,10 @@ func BuildRuntimeWithOptions(cwd, model, baseURL, systemPrompt, apiKey, permissi
 	registry.Register(&tools.ReadMcpResourceTool{Manager: mcpManager})
 	registry.Register(&tools.TeamCreateTool{})
 	registry.Register(&tools.TeamDeleteTool{})
+	registry.Register(&tools.AgentTool{Manager: tasks.DefaultManager()})
+	registry.Register(&tools.SendMessageTool{Manager: tasks.DefaultManager()})
+	registry.Register(&tools.McpAuthTool{Manager: mcpManager})
+	registry.Register(&tools.LspTool{})
 	mcpToolKeys := map[string]string{}
 	for _, toolInfo := range mcpManager.ListTools() {
 		adapter := tools.NewMcpToolAdapter(mcpManager, toolInfo)
